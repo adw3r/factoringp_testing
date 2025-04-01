@@ -1,6 +1,6 @@
 import datetime
 
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Float
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Float, Date
 from sqlalchemy.orm import declarative_base, relationship, Mapped, mapped_column
 
 Base = declarative_base()
@@ -15,7 +15,7 @@ class User(Base):
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     login: Mapped[str] = mapped_column(String(60), unique=True)
-    registration_date: Mapped[datetime.datetime] = mapped_column(DateTime)
+    registration_date: Mapped[datetime.date] = mapped_column(Date)
 
     credits: Mapped[list['Credit']] = relationship('Credit', back_populates='user')
 
@@ -35,9 +35,9 @@ class Credit(Base):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey('users.id'))
     user: Mapped[User] = relationship("User", back_populates="credits")
 
-    issuance_date: Mapped[datetime.datetime] = mapped_column(DateTime)
-    return_date: Mapped[datetime.datetime] = mapped_column(DateTime)
-    actual_return_date: Mapped[datetime.datetime] = mapped_column(DateTime)
+    issuance_date: Mapped[datetime.date] = mapped_column(Date)
+    return_date: Mapped[datetime.date] = mapped_column(Date)
+    actual_return_date: Mapped[datetime.date] = mapped_column(Date)
     body: Mapped[float] = mapped_column(Float)
     percent: Mapped[float] = mapped_column(Float)
 
@@ -68,7 +68,7 @@ class Payment(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     sum: Mapped[float] = mapped_column(Float)
-    payment_date: Mapped[datetime.datetime] = mapped_column(DateTime)
+    payment_date: Mapped[datetime.date] = mapped_column(Date)
     credit_id: Mapped[int] = mapped_column(Integer, ForeignKey('credits.id'))
     credit: Mapped[Credit] = relationship('Credit', back_populates='payment')
 
@@ -85,7 +85,7 @@ class Plan(Base):
     """
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    period: Mapped[datetime.datetime] = mapped_column(DateTime)
+    period: Mapped[datetime.date] = mapped_column(Date)
     sum: Mapped[float] = mapped_column(Float)
     category_id: Mapped[int] = Column(Integer, ForeignKey('categories.id'))
 
